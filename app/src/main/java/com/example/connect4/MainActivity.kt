@@ -5,12 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -21,16 +19,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.layout.boundsInParent
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.connect4.ui.theme.Connect4Theme
 
@@ -60,7 +52,7 @@ fun Connect4Screen() {
     // Define the board
     val rows = 6
     val cols = 7
-    //Define the initial board state. 0 means empty, 1 for player one and -1 for player two
+    // Define the initial board state. 0 means empty, 1 for player one and -1 for player two
     val board = remember { Array(rows) { IntArray(cols) { 0 } } }
     var draggedDisc: Pair<Color, Int>? by remember { mutableStateOf(null) }
     Column(
@@ -72,14 +64,14 @@ fun Connect4Screen() {
     ) {
         // Displaying a title or message is a good practice
         Text("Connect 4", style = MaterialTheme.typography.headlineLarge, color = MaterialTheme.colorScheme.primary)
-        Spacer(modifier = Modifier.padding(16.dp)) //Added space between the title and the board
-        Board(rows = rows, cols = cols, onDiscDropped = { col ->
+        Spacer(modifier = Modifier.padding(16.dp)) // Added space between the title and the board
+        Board(rows = rows, cols = cols, onDiscDropped = { col: Int ->
             println("Disc dropped in column $col")
             val row = Utils.getNextEmptyRow(board, col, rows)
             if (row != -1) {
                 board[row][col] = 1 // Assuming it is player 1
             }
-        }) { boardBounds -> //Changed the cols number to be more adequate with the game
+        }) { boardBounds: Rect -> // Changed the cols number to be more adequate with the game
             // Example usage of Disc within Board (remove later)
             val padding = 5.dp
             with(LocalDensity.current) {
@@ -90,60 +82,6 @@ fun Connect4Screen() {
             }
         }
     }
-}
-
-@Composable
-fun Board(
-    rows: Int,
-    cols: Int,
-    onDiscDropped: (Int) -> Unit,
-    content: @Composable (boardBounds: Rect) -> Unit
-) {
-    var boardBounds by remember { mutableStateOf(Rect.Zero) }
-    val padding = 5.dp
-    val paddingPx = with(LocalDensity.current) { padding.toPx() }
-
-    Box(
-        modifier = Modifier
-            .onGloballyPositioned { coordinates ->
-                boardBounds = coordinates.boundsInParent()
-            }
-    ) {
-        Canvas(
-            modifier = Modifier
-                .size(calculateBoardSize(rows, cols))
-                .padding(padding)
-        ) {
-            drawBoardBackground(rows, cols, paddingPx)
-
-        }
-        content(boardBounds)
-    }
-}
-
-fun DrawScope.drawBoardBackground(rows: Int, cols: Int, padding: Float) {
-    val cellSize = size.width / cols
-    val boardHeight = rows * cellSize
-    drawRect(
-        color = Color.Blue,
-        size = Size(size.width, boardHeight)
-    )
-    for (row in 0 until rows) {
-        for (col in 0 until cols) {
-            val x = col * cellSize
-            val y = row * cellSize
-            drawCircle(
-                color = Color.White,
-                radius = cellSize / 2 * 0.8f,
-                center = Offset(x + cellSize / 2, y + cellSize / 2)
-            )
-        }
-    }
-}
-
-fun calculateBoardSize(rows: Int, cols: Int): Dp {
-    val cellSize = 50.dp
-    return (cellSize * cols).coerceAtMost(cellSize * rows)
 }
 
 @Preview(showBackground = true)
