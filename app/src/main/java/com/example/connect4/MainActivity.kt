@@ -20,10 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.connect4.ui.theme.Connect4Theme
+import androidx.compose.ui.geometry.Rect
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +83,6 @@ fun Connect4Screen() {
                     board = board,
                     rows = rows,
                     padding = paddingPx,
-                    sizeFactor = 0.8f, // Adjust the size factor as needed
                     onDiscDropped = { row, column ->
                         board[row][column] = 1 // Now disc is placed
                     }
