@@ -100,6 +100,8 @@ fun Board(
     content: @Composable (boardBounds: Rect) -> Unit
 ) {
     var boardBounds by remember { mutableStateOf(Rect.Zero) }
+    val padding = 5.dp
+    val paddingPx = with(LocalDensity.current) { padding.toPx() }
 
     Box(
         modifier = Modifier
@@ -110,16 +112,16 @@ fun Board(
         Canvas(
             modifier = Modifier
                 .size(calculateBoardSize(rows, cols))
-                .padding(5.dp)
+                .padding(padding)
         ) {
-            drawBoardBackground(rows, cols)
+            drawBoardBackground(rows, cols, paddingPx)
 
         }
         content(boardBounds)
     }
 }
 
-fun DrawScope.drawBoardBackground(rows: Int, cols: Int) {
+fun DrawScope.drawBoardBackground(rows: Int, cols: Int, padding: Float) {
     val cellSize = size.width / cols
     val boardHeight = rows * cellSize
     drawRect(
