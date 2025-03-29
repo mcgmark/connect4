@@ -36,13 +36,14 @@ fun Disc(
     board: Array<IntArray>,
     rows: Int,
     padding: Float,
-    onDiscDropped: (Int, Int) -> Unit
+    onDiscDropped: (Int, Int) -> Unit,
+    sizeFactor: Float = 0.8f // Add a size factor to adjust the disc size
 ) {
     var currentPosition by remember { mutableStateOf(calculateInitialPosition(boardBounds, col, padding)) }
     var targetY by remember { mutableStateOf(0.dp) }
     var isFalling by remember { mutableStateOf(false) }
     val cellSize = boardBounds.width / board[0].size
-    val discRadius = cellSize / 2 * 0.8f
+    val discRadius = cellSize / 2 * sizeFactor
     val discDiameter = discRadius * 2
 
     if (isFalling) {

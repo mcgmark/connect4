@@ -3,7 +3,6 @@ package com.example.connect4
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -76,9 +75,19 @@ fun Connect4Screen() {
             val padding = 5.dp
             with(LocalDensity.current) {
                 val paddingPx = padding.toPx()
-                Disc(Color.Red, boardBounds, isDragging = true, col = 0, board = board, rows = rows, padding = paddingPx) { row, column ->
-                    board[row][column] = 1 // Now disc is placed
-                }
+                Disc(
+                    color = Color.Red,
+                    boardBounds = boardBounds,
+                    isDragging = true,
+                    col = 0,
+                    board = board,
+                    rows = rows,
+                    padding = paddingPx,
+                    sizeFactor = 0.8f, // Adjust the size factor as needed
+                    onDiscDropped = { row, column ->
+                        board[row][column] = 1 // Now disc is placed
+                    }
+                )
             }
         }
     }
