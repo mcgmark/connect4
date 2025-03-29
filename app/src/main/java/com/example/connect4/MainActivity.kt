@@ -18,12 +18,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.connect4.ui.theme.Connect4Theme
-import androidx.compose.ui.geometry.Rect
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,23 +70,27 @@ fun Connect4Screen() {
             if (row != -1) {
                 board[row][col] = 1 // Assuming it is player 1
             }
-        }) { boardBounds: Rect -> // Changed the cols number to be more adequate with the game
-            // Example usage of Disc within Board (remove later)
+        }) { boardBounds: Rect ->
             val padding = 5.dp
             with(LocalDensity.current) {
                 val paddingPx = padding.toPx()
-                Disc(
-                    color = Color.Red,
-                    boardBounds = boardBounds,
-                    isDragging = true,
-                    col = 0,
-                    board = board,
-                    rows = rows,
-                    padding = paddingPx,
-                    onDiscDropped = { row, column ->
-                        board[row][column] = 1 // Now disc is placed
+                for (row in 0 until rows) {
+                    for (col in 0 until cols) {
+                        if (board[row][col] != 0) {
+                            val color = if (board[row][col] == 1) Color.Red else Color.Yellow
+                            Disc(
+                                color = color,
+                                boardBounds = boardBounds,
+                                isDragging = false,
+                                col = col,
+                                board = board,
+                                rows = rows,
+                                padding = paddingPx,
+                                onDiscDropped = { _, _ -> }
+                            )
+                        }
                     }
-                )
+                }
             }
         }
     }

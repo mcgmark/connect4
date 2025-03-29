@@ -41,7 +41,7 @@ fun Disc(
     var currentPosition by remember { mutableStateOf(calculateInitialPosition(boardBounds, col, padding)) }
     var targetY by remember { mutableStateOf(0.dp) }
     var isFalling by remember { mutableStateOf(false) }
-    val cellSize = boardBounds.width / board[0].size
+    val cellSize = (boardBounds.width - padding * 2) / board[0].size
     val discRadius = cellSize / 2 * 0.8f // Use the same factor as the Circle on the board
     val discDiameter = discRadius * 2
 
